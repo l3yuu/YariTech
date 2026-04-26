@@ -119,9 +119,11 @@ const AdminLayout = () => {
             <button className="text-gray-400 hover:text-gray-600">
               <Settings className="w-5 h-5" />
             </button>
-            <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium text-xs ml-2 cursor-pointer ring-2 ring-gray-100 hover:ring-blue-300 transition-all">
-              YT
-            </div>
+            <div className="h-6 w-px bg-gray-200 mx-1 hidden sm:block"></div>
+            <button className="hidden sm:flex items-center bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+              Add Client
+            </button>
           </div>
         </header>
 

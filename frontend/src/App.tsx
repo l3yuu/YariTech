@@ -5,6 +5,7 @@ import AdminLayout from './layouts/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
 import Inquiries from './pages/admin/Inquiries';
 import Projects from './pages/admin/Projects';
+import Clients from './pages/admin/Clients';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="inquiries" element={<Inquiries />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="clients" element={<Clients />} />
         </Route>
       </Routes>
     </Router>
