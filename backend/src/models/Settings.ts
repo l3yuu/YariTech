@@ -34,4 +34,5 @@ const settingsSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-export default mongoose.model('Settings', settingsSchema);
+const Settings = mongoose.model('Settings', settingsSchema);
+export default Settings;
