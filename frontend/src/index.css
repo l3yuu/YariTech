@@ -1,29 +1,83 @@
 @import "tailwindcss";
 
+/* ── Dark mode: class-based (Tailwind v4) ──────────────────────── */
+@variant dark (&:is(.dark *));
+
+/* ── CSS Variables ─────────────────────────────────────────────── */
 :root {
-  --primary: #002244; /* Dark Navy Blue */
-  --primary-hover: #003366;
-  --accent: #0066cc; /* Bright Blue */
-  --accent-hover: #005bb5;
-  --bg-light: #f8fafc;
+  --primary: #0a192f;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --bg: #ffffff;
+  --bg-surface: #f8fafc;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --card: #ffffff;
+}
+
+.dark {
+  --bg: #0a0f1a;
+  --bg-surface: #0f172a;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #1e293b;
+  --card: #111827;
 }
 
 @theme {
   --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
-  --color-bg-light: var(--bg-light);
-  --font-sans: 'Inter', 'Outfit', sans-serif;
+  --font-sans: 'Inter', sans-serif;
 }
 
+/* ── Base ──────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
+  color-scheme: light dark;
+}
+
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #ffffff;
-  color: #1a202c;
+  background-color: var(--bg);
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Dot-grid hero background ──────────────────────────────────── */
+.dot-grid {
+  background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.dark .dot-grid {
+  background-image: radial-gradient(circle, #1e293b 1px, transparent 1px);
+}
+
+/* ── Gradient text utility ─────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Card glow on hover ────────────────────────────────────────── */
+.card-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 0 0 1px #2563eb33, 0 20px 40px -12px #2563eb22;
+  transform: translateY(-2px);
+}
+.dark .card-hover:hover {
+  box-shadow: 0 0 0 1px #2563eb55, 0 20px 40px -12px #2563eb33;
 }

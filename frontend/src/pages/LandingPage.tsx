@@ -10,7 +10,7 @@ import Footer from '../components/Footer';
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-white selection:bg-blue-100 selection:text-blue-900 font-sans">
+    <div className="min-h-screen bg-white dark:bg-[#0a0f1a] selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100 font-sans antialiased">
       <Navbar />
       <main>
         <Hero />

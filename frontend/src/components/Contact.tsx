@@ -1,100 +1,129 @@
-
-import { MessageSquare, Calendar } from 'lucide-react';
+import { MessageSquare, Calendar, Mail, ArrowRight } from 'lucide-react';
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-20 bg-white">
+    <section id="contact" className="py-24 bg-white dark:bg-[#0a0f1a]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-16">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">Contact</p>
+          <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+            Let's Build Something Great
+          </h2>
+          <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-base">
+            Ready to take your digital presence to the next level? Let's talk.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-5 gap-12 items-start max-w-6xl mx-auto">
           
-          <div className="mb-12 lg:mb-0">
-            <h2 className="text-3xl font-bold text-gray-900 tracking-tight mb-4">Let's Build Something Great</h2>
-            <p className="text-gray-500 mb-8 max-w-md">
-              Ready to take your digital presence to the next level? Fill out the form or reach out directly.
-            </p>
-            
-            <div className="space-y-6">
-              <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-green-200 hover:bg-green-50 transition-colors cursor-pointer group">
-                <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <MessageSquare className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-gray-900">WhatsApp Us</h4>
-                  <p className="text-gray-500 text-sm">+63 900 000 0000</p>
-                </div>
+          {/* Left: contact info */}
+          <div className="lg:col-span-2 space-y-4">
+            <a href="https://wa.me/639000000000" target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-4 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/50 hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-lg hover:shadow-emerald-500/10 transition-all group card-hover"
+            >
+              <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-950/50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <MessageSquare className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
-              
-              <div className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-colors cursor-pointer group">
-                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Calendar className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-gray-900">Schedule a Call</h4>
-                  <p className="text-gray-500 text-sm">Calendly Link</p>
-                </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">WhatsApp Us</h4>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">+63 900 000 0000</p>
               </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+            </a>
+
+            <a href="mailto:hello@yaritech.ph"
+              className="flex items-center gap-4 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/50 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-500/10 transition-all group card-hover"
+            >
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-950/50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">Email Us</h4>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">hello@yaritech.ph</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+            </a>
+
+            <a href="#"
+              className="flex items-center gap-4 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/50 hover:border-violet-400 dark:hover:border-violet-600 hover:shadow-lg hover:shadow-violet-500/10 transition-all group card-hover"
+            >
+              <div className="w-12 h-12 bg-violet-100 dark:bg-violet-950/50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <Calendar className="w-5 h-5 text-violet-600 dark:text-violet-400" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">Book a Call</h4>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">30-min free consultation</p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-violet-500 group-hover:translate-x-1 transition-all" />
+            </a>
+
+            {/* Trust note */}
+            <div className="mt-6 p-5 rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 text-white">
+              <p className="text-sm font-semibold mb-1">⚡ Fast response time</p>
+              <p className="text-xs text-blue-100">We typically respond within 24 hours on business days.</p>
             </div>
           </div>
-          
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 relative overflow-hidden">
-             {/* Decorative element */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -z-10"></div>
-            
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          {/* Right: form */}
+          <div className="lg:col-span-3">
+            <div className="bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl shadow-black/5 dark:shadow-black/20 p-8">
+              <form className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="name" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Full Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      placeholder="Juan Dela Cruz"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-shadow"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="juan@email.com"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-shadow"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    className="w-full px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-shadow"
-                    placeholder="Juan Dela Cruz"
+                  <label htmlFor="projectType" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Project Type</label>
+                  <select
+                    id="projectType"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-shadow"
+                  >
+                    <option>Web Development</option>
+                    <option>Mobile App</option>
+                    <option>System Development</option>
+                    <option>UI/UX Design</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Message</label>
+                  <textarea
+                    id="message"
+                    rows={5}
+                    placeholder="Tell us about your project, goals, and timeline..."
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none transition-shadow"
                   />
                 </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    className="w-full px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-shadow"
-                    placeholder="juan@email.com"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label htmlFor="projectType" className="block text-sm font-medium text-gray-700 mb-1">Project Type</label>
-                <select 
-                  id="projectType" 
-                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-shadow bg-white"
+
+                <button
+                  type="button"
+                  className="w-full py-3.5 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:-translate-y-0.5"
                 >
-                  <option>Web Development</option>
-                  <option>Mobile App</option>
-                  <option>System Development</option>
-                  <option>UI/UX Design</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                <textarea 
-                  id="message" 
-                  rows={4} 
-                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-shadow resize-none"
-                  placeholder="Tell us about your project..."
-                ></textarea>
-              </div>
-              
-              <button 
-                type="button" 
-                className="w-full bg-[#001f3f] hover:bg-[#003366] text-white font-bold py-4 px-8 rounded-md transition-colors"
-              >
-                Send Message
-              </button>
-            </form>
+                  Send Message →
+                </button>
+              </form>
+            </div>
           </div>
-          
+
         </div>
       </div>
     </section>
