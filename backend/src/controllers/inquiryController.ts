@@ -50,3 +50,21 @@ export const updateInquiryStatus = async (req: express.Request, res: express.Res
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// @desc    Delete inquiry
+// @route   DELETE /api/inquiries/:id
+// @access  Private
+export const deleteInquiry = async (req: express.Request, res: express.Response) => {
+  try {
+    const inquiry = await Inquiry.findById(req.params.id);
+
+    if (inquiry) {
+      await inquiry.deleteOne();
+      res.json({ message: 'Inquiry removed' });
+    } else {
+      res.status(404).json({ message: 'Inquiry not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
