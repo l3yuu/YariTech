@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Menu, X, Sun, Moon, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { user } = useAuth();
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -65,10 +68,10 @@ const Navbar = () => {
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <Link
-              to="/login"
+              to={user ? "/admin/dashboard" : "/login"}
               className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
             >
-              Login
+              {user ? 'Dashboard' : 'Login'}
             </Link>
             <a
               href="#contact"
@@ -107,8 +110,12 @@ const Navbar = () => {
             </a>
           ))}
           <div className="pt-3 flex flex-col gap-2 border-t border-slate-200 dark:border-slate-800 mt-3">
-            <Link to="/login" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-              Login
+            <Link 
+              to={user ? "/admin/dashboard" : "/login"} 
+              onClick={() => setIsOpen(false)}
+              className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              {user ? 'Dashboard' : 'Login'}
             </Link>
             <a href="#contact" className="flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600">
               Get Started

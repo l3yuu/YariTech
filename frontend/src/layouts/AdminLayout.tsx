@@ -1,16 +1,23 @@
 import { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { 
   LayoutDashboard, Inbox, Rocket, Users, MessageSquareQuote,
   FileText, UserSquare2, Settings, Search, Bell, Menu, X, LogOut,
-  Sun, Moon, Zap
+  Sun, Moon, Zap, ExternalLink
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -50,6 +57,13 @@ const AdminLayout = () => {
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
+          <Link
+            to="/"
+            className="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800/60 hover:text-white transition-all group mb-4 border border-slate-800/50"
+          >
+            <ExternalLink className="mr-3 flex-shrink-0 h-4 w-4" aria-hidden="true" />
+            View Website
+          </Link>
           {navigation.map((item) => (
             <NavLink
               key={item.name}
@@ -71,14 +85,16 @@ const AdminLayout = () => {
         {/* User + Logout */}
         <div className="p-4 border-t border-slate-800/80 space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-xs shadow-md">YT</div>
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-xs shadow-md">
+              {user?.name?.charAt(0) || 'A'}
+            </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white truncate">System Admin</p>
-              <p className="text-xs text-slate-500 truncate">admin@yaritech.com</p>
+              <p className="text-sm font-semibold text-white truncate">{user?.name || 'Admin User'}</p>
+              <p className="text-xs text-slate-500 truncate">{user?.email || 'admin@yaritech.ph'}</p>
             </div>
           </div>
           <button
-            onClick={() => navigate('/login')}
+            onClick={handleLogout}
             className="w-full flex items-center px-3 py-2 text-xs font-medium text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors group"
           >
             <LogOut className="w-3.5 h-3.5 mr-2 group-hover:text-red-400" />

@@ -22,13 +22,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for saved user in localStorage
+    // Check for saved user in localStorage on initial load
     const savedUser = localStorage.getItem('userInfo');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
     setLoading(false);
+
+    // Sync state across tabs
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'userInfo') {
+        if (e.newValue) {
+          setUser(JSON.parse(e.newValue));
+        } else {
+          setUser(null);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
 
   const login = (userData: User) => {
     setUser(userData);
