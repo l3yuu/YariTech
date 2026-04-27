@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Edit2, Globe, Loader2, Search, Users } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import API_URL from '../../config';
 
 interface Client {
   _id: string;
@@ -34,7 +35,7 @@ export default function Clients() {
 
   const fetchClients = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/clients', {
+      const response = await fetch(`${API_URL}/clients`, {
         headers: {
           'Authorization': `Bearer ${user?.token}`
         }
@@ -52,8 +53,8 @@ export default function Clients() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const url = isEditing 
-      ? `http://localhost:5000/api/clients/${selectedClient?._id}` 
-      : 'http://localhost:5000/api/clients';
+      ? `${API_URL}/clients/${selectedClient?._id}` 
+      : `${API_URL}/clients`;
     const method = isEditing ? 'PUT' : 'POST';
 
     try {
@@ -79,7 +80,7 @@ export default function Clients() {
     if (!window.confirm('Are you sure you want to delete this client?')) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/clients/${id}`, {
+      const response = await fetch(`${API_URL}/clients/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user?.token}`

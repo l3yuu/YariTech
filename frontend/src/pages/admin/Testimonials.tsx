@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Edit2, Trash2, EyeOff, Eye, Plus, Star, MessageSquareQuote, CheckCircle2, EyeOff as EyeOffIcon, Loader2, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import API_URL from '../../config';
 
 interface Testimonial {
   _id: string;
@@ -34,7 +35,7 @@ const Testimonials = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/testimonials');
+      const response = await fetch(`${API_URL}/testimonials`);
       if (response.ok) {
         const data = await response.json();
         setTestimonials(data);
@@ -55,7 +56,7 @@ const Testimonials = () => {
   const toggleStatus = async (id: string, currentStatus: string) => {
     const newStatus = currentStatus === 'APPROVED' ? 'HIDDEN' : 'APPROVED';
     try {
-      const response = await fetch(`http://localhost:5000/api/testimonials/${id}`, {
+      const response = await fetch(`${API_URL}/testimonials/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ const Testimonials = () => {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this testimonial?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/testimonials/${id}`, {
+      const response = await fetch(`${API_URL}/testimonials/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user?.token}`
@@ -118,8 +119,8 @@ const Testimonials = () => {
     e.preventDefault();
     try {
       const url = editingId 
-        ? `http://localhost:5000/api/testimonials/${editingId}`
-        : 'http://localhost:5000/api/testimonials';
+        ? `${API_URL}/testimonials/${editingId}`
+        : `${API_URL}/testimonials`;
       
       const response = await fetch(url, {
         method: editingId ? 'PUT' : 'POST',

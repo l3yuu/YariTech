@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, Plus, Edit2, Trash2, Rocket, X, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import API_URL from '../../config';
 
 interface Project {
   _id: string;
@@ -40,7 +41,7 @@ const Projects = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/projects');
+      const response = await fetch(`${API_URL}/projects`);
       const data = await response.json();
       setProjects(data);
     } catch (error) {
@@ -78,8 +79,8 @@ const Projects = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const url = editingProject 
-      ? `http://localhost:5000/api/projects/${editingProject._id}` 
-      : 'http://localhost:5000/api/projects';
+      ? `${API_URL}/projects/${editingProject._id}` 
+      : `${API_URL}/projects`;
     const method = editingProject ? 'PUT' : 'POST';
 
     try {
@@ -108,7 +109,7 @@ const Projects = () => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/projects/${id}`, {
+      const response = await fetch(`${API_URL}/projects/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user?.token}`
@@ -125,7 +126,7 @@ const Projects = () => {
 
   const toggleVisibility = async (id: string, currentStatus: boolean) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/projects/${id}`, {
+      const response = await fetch(`${API_URL}/projects/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

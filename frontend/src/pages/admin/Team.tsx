@@ -9,6 +9,7 @@ import {
   Globe
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import API_URL from '../../config';
 
 interface TeamMember {
   _id: string;
@@ -47,7 +48,7 @@ const Team = () => {
   const fetchMembers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/team');
+      const response = await fetch(`${API_URL}/team`);
       if (response.ok) {
         const data = await response.json();
         setMembers(data);
@@ -100,7 +101,7 @@ const Team = () => {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to remove this team member?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/team/${id}`, {
+      const response = await fetch(`${API_URL}/team/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user?.token}`
@@ -118,8 +119,8 @@ const Team = () => {
     e.preventDefault();
     try {
       const url = editingId 
-        ? `http://localhost:5000/api/team/${editingId}`
-        : 'http://localhost:5000/api/team';
+        ? `${API_URL}/team/${editingId}`
+        : `${API_URL}/team`;
       
       const response = await fetch(url, {
         method: editingId ? 'PUT' : 'POST',

@@ -1,6 +1,7 @@
 import { MessageSquare, Calendar, Mail, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import API_URL from '../config';
 
 const Contact = () => {
   const [loading, setLoading] = useState(false);
@@ -19,7 +20,7 @@ const Contact = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/inquiries', {
+      const response = await fetch(`${API_URL}/inquiries`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
