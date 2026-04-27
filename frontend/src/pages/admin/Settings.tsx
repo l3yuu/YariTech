@@ -12,7 +12,6 @@ import {
   CreditCard,
   Calendar,
   Cloud,
-  ChevronRight,
   Save,
   Trash2,
   ExternalLink
