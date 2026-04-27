@@ -10,6 +10,7 @@ import clientRoutes from './routes/clientRoutes.js';
 import testimonialRoutes from './routes/testimonialRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
 
 
 // Load env vars
@@ -33,6 +34,7 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/team', teamRoutes);
+app.use('/api/settings', settingsRoutes);
 
 
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Info, 
   Shield, 
@@ -24,6 +24,20 @@ import { useAuth } from '../../context/AuthContext';
 const Settings = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('General');
+  
+  const [companyData, setCompanyData] = useState({
+    companyName: 'Yari Tech Solutions',
+    businessEmail: 'contact@yaritech.ph',
+    phoneNumber: '+63 917 123 4567',
+    headquarters: 'BGC, Taguig City, Metro Manila',
+    socials: {
+      facebook: '',
+      linkedin: '',
+      github: '',
+      instagram: ''
+    }
+  });
+
   const [notifications, setNotifications] = useState({
     newInquiry: true,
     newClient: true,
@@ -35,8 +49,86 @@ const Settings = () => {
     newPassword: '',
     confirmPassword: '',
   });
+  
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
+
+  // Fetch settings on mount
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/settings', {
+          headers: {
+            'Authorization': `Bearer ${user?.token}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCompanyData({
+            companyName: data.companyName,
+            businessEmail: data.businessEmail,
+            phoneNumber: data.phoneNumber,
+            headquarters: data.headquarters,
+            socials: data.socials
+          });
+          setNotifications(data.notifications);
+        }
+      } catch (err) {
+        console.error('Failed to fetch settings');
+      }
+    };
+
+    if (user?.token) fetchSettings();
+  }, [user?.token]);
+
+  const handleGeneralUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setFeedback({ type: null, message: '' });
+
+    try {
+      const response = await fetch('http://localhost:5000/api/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user?.token}`
+        },
+        body: JSON.stringify(companyData),
+      });
+
+      if (response.ok) {
+        setFeedback({ type: 'success', message: 'General settings updated!' });
+      } else {
+        throw new Error('Failed to update settings');
+      }
+    } catch (err: any) {
+      setFeedback({ type: 'error', message: err.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleNotificationToggle = async (id: string) => {
+    const updatedNotifications = { 
+      ...notifications, 
+      [id]: !notifications[id as keyof typeof notifications] 
+    };
+    
+    setNotifications(updatedNotifications);
+
+    try {
+      await fetch('http://localhost:5000/api/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user?.token}`
+        },
+        body: JSON.stringify({ notifications: updatedNotifications }),
+      });
+    } catch (err) {
+      console.error('Failed to update notifications');
+    }
+  };
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,61 +221,123 @@ const Settings = () => {
 
           {/* GENERAL TAB */}
           {activeTab === 'General' && (
-            <div className="bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm p-8 lg:p-10">
+            <form onSubmit={handleGeneralUpdate} className="bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm p-8 lg:p-10">
               <div className="mb-10">
                 <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">General Information</h2>
+                {feedback.type === 'success' && activeTab === 'General' && (
+                  <div className="mb-4 p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400 rounded-xl text-xs font-medium flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4" /> {feedback.message}
+                  </div>
+                )}
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Your basic company information used across the admin panel.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                {[
-                  { label: 'Company Name', val: 'Yari Tech Solutions', type: 'text' },
-                  { label: 'Business Email', val: 'contact@yaritech.ph', type: 'email' },
-                  { label: 'Phone Number', val: '+63 917 123 4567', type: 'text' },
-                  { label: 'Headquarters', val: 'BGC, Taguig City, Metro Manila', type: 'text' },
-                ].map((field) => (
-                  <div key={field.label}>
-                    <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">{field.label}</label>
-                    <input 
-                      type={field.type} 
-                      defaultValue={field.val}
-                      className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
-                    />
-                  </div>
-                ))}
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Company Name</label>
+                  <input 
+                    type="text" 
+                    value={companyData.companyName}
+                    onChange={(e) => setCompanyData({...companyData, companyName: e.target.value})}
+                    className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Business Email</label>
+                  <input 
+                    type="email" 
+                    value={companyData.businessEmail}
+                    onChange={(e) => setCompanyData({...companyData, businessEmail: e.target.value})}
+                    className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Phone Number</label>
+                  <input 
+                    type="text" 
+                    value={companyData.phoneNumber}
+                    onChange={(e) => setCompanyData({...companyData, phoneNumber: e.target.value})}
+                    className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Headquarters</label>
+                  <input 
+                    type="text" 
+                    value={companyData.headquarters}
+                    onChange={(e) => setCompanyData({...companyData, headquarters: e.target.value})}
+                    className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
+                  />
+                </div>
               </div>
 
               <div className="mb-10">
                 <h3 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-6">Social Media Presence</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {[
-                    { icon: Globe, placeholder: 'Facebook URL' },
-                    { icon: Briefcase, placeholder: 'LinkedIn URL' },
-                    { icon: Code, placeholder: 'GitHub Profile' },
-                    { icon: Camera, placeholder: 'Instagram Username' },
-                  ].map((social, i) => (
-                    <div key={i} className="flex rounded-xl shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
-                      <span className="inline-flex items-center px-5 bg-slate-900 dark:bg-slate-800 text-white border-r border-slate-700">
-                        <social.icon className="w-4 h-4" />
-                      </span>
-                      <input 
-                        type="text" 
-                        placeholder={social.placeholder} 
-                        className="flex-1 block w-full px-5 py-3 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm font-semibold bg-white dark:bg-slate-900/50 text-slate-900 dark:text-white"
-                      />
-                    </div>
-                  ))}
+                  <div className="flex rounded-xl shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <span className="inline-flex items-center px-5 bg-slate-900 dark:bg-slate-800 text-white border-r border-slate-700">
+                      <Globe className="w-4 h-4" />
+                    </span>
+                    <input 
+                      type="text" 
+                      placeholder="Facebook URL" 
+                      value={companyData.socials.facebook}
+                      onChange={(e) => setCompanyData({...companyData, socials: {...companyData.socials, facebook: e.target.value}})}
+                      className="flex-1 block w-full px-5 py-3 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm font-semibold bg-white dark:bg-slate-900/50 text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div className="flex rounded-xl shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <span className="inline-flex items-center px-5 bg-slate-900 dark:bg-slate-800 text-white border-r border-slate-700">
+                      <Briefcase className="w-4 h-4" />
+                    </span>
+                    <input 
+                      type="text" 
+                      placeholder="LinkedIn URL" 
+                      value={companyData.socials.linkedin}
+                      onChange={(e) => setCompanyData({...companyData, socials: {...companyData.socials, linkedin: e.target.value}})}
+                      className="flex-1 block w-full px-5 py-3 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm font-semibold bg-white dark:bg-slate-900/50 text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div className="flex rounded-xl shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <span className="inline-flex items-center px-5 bg-slate-900 dark:bg-slate-800 text-white border-r border-slate-700">
+                      <Code className="w-4 h-4" />
+                    </span>
+                    <input 
+                      type="text" 
+                      placeholder="GitHub Profile" 
+                      value={companyData.socials.github}
+                      onChange={(e) => setCompanyData({...companyData, socials: {...companyData.socials, github: e.target.value}})}
+                      className="flex-1 block w-full px-5 py-3 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm font-semibold bg-white dark:bg-slate-900/50 text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div className="flex rounded-xl shadow-sm overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <span className="inline-flex items-center px-5 bg-slate-900 dark:bg-slate-800 text-white border-r border-slate-700">
+                      <Camera className="w-4 h-4" />
+                    </span>
+                    <input 
+                      type="text" 
+                      placeholder="Instagram Username" 
+                      value={companyData.socials.instagram}
+                      onChange={(e) => setCompanyData({...companyData, socials: {...companyData.socials, instagram: e.target.value}})}
+                      className="flex-1 block w-full px-5 py-3 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm font-semibold bg-white dark:bg-slate-900/50 text-slate-900 dark:text-white"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="flex justify-end pt-8 border-t border-slate-100 dark:border-slate-700/60">
-                <button className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white rounded-xl text-sm font-bold shadow-md shadow-blue-500/20 transition-all hover:-translate-y-0.5">
-                  <Save className="w-4 h-4" /> Save Changes
+                <button 
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white rounded-xl text-sm font-bold shadow-md shadow-blue-500/20 transition-all hover:-translate-y-0.5 disabled:opacity-70"
+                >
+                  {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                  Save Changes
                 </button>
               </div>
-            </div>
+            </form>
           )}
 
           {/* SECURITY TAB */}
@@ -273,7 +427,7 @@ const Settings = () => {
                       <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{item.desc}</p>
                     </div>
                     <button 
-                      onClick={() => setNotifications(n => ({ ...n, [item.id]: !n[item.id as keyof typeof notifications] }))}
+                      onClick={() => handleNotificationToggle(item.id)}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all focus:outline-none ${notifications[item.id as keyof typeof notifications] ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
                     >
                       <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-all ${notifications[item.id as keyof typeof notifications] ? 'translate-x-6' : 'translate-x-1'}`} />
