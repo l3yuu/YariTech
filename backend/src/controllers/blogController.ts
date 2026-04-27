@@ -18,7 +18,7 @@ export const getBlogPosts = async (req: express.Request, res: express.Response) 
 // @access  Public
 export const getBlogPostBySlug = async (req: express.Request, res: express.Response) => {
   try {
-    const post = await BlogPost.findOne({ slug: req.params.slug });
+    const post = await BlogPost.findOne({ slug: req.params.slug as string });
     if (post) {
       res.json(post);
     } else {
