@@ -12,18 +12,75 @@ import {
   CreditCard,
   Calendar,
   Cloud,
+  ExternalLink,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
   Save,
-  Trash2,
-  ExternalLink
+  Trash2
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const Settings = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('General');
   const [notifications, setNotifications] = useState({
     newInquiry: true,
     newClient: true,
     projectStatus: false,
   });
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
+
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFeedback({ type: null, message: '' });
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setFeedback({ type: 'error', message: 'New passwords do not match' });
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      setFeedback({ type: 'error', message: 'Password must be at least 6 characters' });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/updatepassword', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user?.token}`
+        },
+        body: JSON.stringify({
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to update password');
+      }
+
+      setFeedback({ type: 'success', message: 'Password updated successfully!' });
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (err: any) {
+      setFeedback({ type: 'error', message: err.message });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const tabs = [
     { name: 'General', icon: Info },
@@ -142,25 +199,57 @@ const Settings = () => {
                 </div>
               </div>
               
-              <div className="max-w-md space-y-6">
-                {[
-                  { label: 'Current Password', type: 'password' },
-                  { label: 'New Password', type: 'password' },
-                  { label: 'Confirm New Password', type: 'password' },
-                ].map((pw) => (
-                  <div key={pw.label}>
-                    <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">{pw.label}</label>
-                    <input 
-                      type={pw.type} 
-                      className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
-                    />
+              <form onSubmit={handlePasswordUpdate} className="max-w-md space-y-6">
+                {feedback.type && (
+                  <div className={`p-4 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-300 ${feedback.type === 'success' ? 'bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/30 text-emerald-700 dark:text-emerald-400' : 'bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/30 text-red-700 dark:text-red-400'}`}>
+                    {feedback.type === 'success' ? <CheckCircle2 className="w-5 h-5 flex-shrink-0" /> : <AlertCircle className="w-5 h-5 flex-shrink-0" />}
+                    <p className="text-sm font-medium">{feedback.message}</p>
                   </div>
-                ))}
+                )}
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Current Password</label>
+                  <input 
+                    type="password"
+                    value={passwordData.currentPassword}
+                    onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                    required
+                    className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">New Password</label>
+                  <input 
+                    type="password"
+                    value={passwordData.newPassword}
+                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                    required
+                    className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Confirm New Password</label>
+                  <input 
+                    type="password"
+                    value={passwordData.confirmPassword}
+                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                    required
+                    className="w-full px-5 py-3 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm font-semibold shadow-sm bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white transition-all"
+                  />
+                </div>
                 
-                <button className="w-full mt-4 px-6 py-3 border border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 rounded-xl text-sm font-bold hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all shadow-sm">
+                <button 
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full mt-4 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-all shadow-md shadow-blue-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}
                   Update Password
                 </button>
-              </div>
+              </form>
+
             </div>
           )}
 

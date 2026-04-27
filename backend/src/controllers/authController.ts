@@ -80,3 +80,34 @@ export const registerUser = async (req: express.Request, res: express.Response) 
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+
+// @desc    Update user password
+// @route   PUT /api/auth/updatepassword
+// @access  Private
+export const updatePassword = async (req: express.Request, res: express.Response) => {
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById((req as any).user._id).select('+password');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check current password
+    const isMatch = await (user as any).matchPassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    // Set new password (pre-save middleware will hash it)
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
