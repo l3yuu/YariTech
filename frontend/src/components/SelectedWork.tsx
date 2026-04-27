@@ -1,4 +1,5 @@
 import { ArrowRight, ExternalLink } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const projects = [
   {
@@ -29,7 +30,13 @@ const SelectedWork = () => {
     <section id="portfolio" className="py-24 bg-white dark:bg-[#0a0f1a]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 gap-4"
+        >
           <div>
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">Portfolio</p>
             <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -43,12 +50,19 @@ const SelectedWork = () => {
             View all projects
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </a>
-        </div>
+        </motion.div>
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <div key={project.title} className="group cursor-pointer">
+          {projects.map((project, i) => (
+            <motion.div 
+              key={project.title}
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="group cursor-pointer"
+            >
               {/* Image area */}
               <div className={`relative overflow-hidden rounded-2xl mb-5 aspect-[4/3] bg-gradient-to-br ${project.gradient}`}>
                 {/* Abstract decorations */}
@@ -75,7 +89,7 @@ const SelectedWork = () => {
 
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{project.title}</h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{project.description}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

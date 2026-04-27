@@ -32,17 +32,21 @@ const Navbar = () => {
         : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-18 py-4">
+        <div className="flex justify-between items-center h-16 py-3">
           
           {/* Logo */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-md">
+          <Link 
+            to="/" 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="flex items-center gap-2.5 group transition-all"
+          >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-md group-hover:shadow-blue-500/25 group-hover:-translate-y-0.5 transition-all">
               <Zap className="w-4 h-4 text-white" />
             </div>
             <span className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
               Yari<span className="text-blue-600">Tech</span>
             </span>
-          </div>
+          </Link>
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-8">

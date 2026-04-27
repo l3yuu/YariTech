@@ -66,7 +66,7 @@ const Testimonials = () => {
   const filteredTestimonials = testimonials.filter(t => filter === 'ALL' || t.status === filter);
 
   const toggleStatus = (id: string) => {
-    setTestimonials(testimonials.map(t => 
+    setTestimonials(testimonials.map(t =>
       t.id === id ? { ...t, status: t.status === 'APPROVED' ? 'HIDDEN' : 'APPROVED' } : t
     ));
   };
@@ -83,14 +83,13 @@ const Testimonials = () => {
         </div>
         <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl inline-flex shadow-inner">
           {(['ALL', 'APPROVED', 'HIDDEN'] as const).map((f) => (
-            <button 
+            <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
-                filter === f 
-                  ? 'bg-white dark:bg-slate-700 shadow-md text-slate-900 dark:text-white' 
+              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${filter === f
+                  ? 'bg-white dark:bg-slate-700 shadow-md text-slate-900 dark:text-white'
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
-              }`}
+                }`}
             >
               {f.charAt(0) + f.slice(1).toLowerCase()}
             </button>
@@ -125,17 +124,16 @@ const Testimonials = () => {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Star 
-                    key={star} 
-                    className={`w-4 h-4 ${star <= testimonial.rating ? (testimonial.status === 'HIDDEN' ? 'text-slate-300 dark:text-slate-700 fill-current' : 'text-blue-600 dark:text-blue-500 fill-current') : 'text-slate-200 dark:text-slate-800'}`} 
+                  <Star
+                    key={star}
+                    className={`w-4 h-4 ${star <= testimonial.rating ? (testimonial.status === 'HIDDEN' ? 'text-slate-300 dark:text-slate-700 fill-current' : 'text-blue-600 dark:text-blue-500 fill-current') : 'text-slate-200 dark:text-slate-800'}`}
                   />
                 ))}
               </div>
-              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                testimonial.status === 'APPROVED' 
-                  ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50' 
+              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${testimonial.status === 'APPROVED'
+                  ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50'
                   : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-600'
-              }`}>
+                }`}>
                 {testimonial.status}
               </span>
             </div>
@@ -146,13 +144,13 @@ const Testimonials = () => {
 
             <div className="flex items-center gap-3 mb-6">
               <div className="relative">
-                <img 
-                  src={testimonial.authorImage} 
-                  alt={testimonial.authorName} 
+                <img
+                  src={testimonial.authorImage}
+                  alt={testimonial.authorName}
                   className={`w-10 h-10 rounded-full object-cover border-2 border-white dark:border-slate-800 shadow-sm ${testimonial.status === 'HIDDEN' ? 'opacity-50 grayscale' : ''}`}
                 />
                 <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center ${testimonial.status === 'APPROVED' ? 'bg-emerald-500' : 'bg-slate-400'}`}>
-                   {testimonial.status === 'APPROVED' && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
+                  {testimonial.status === 'APPROVED' && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
                 </div>
               </div>
               <div>
@@ -172,13 +170,12 @@ const Testimonials = () => {
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
-              <button 
+              <button
                 onClick={() => toggleStatus(testimonial.id)}
-                className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-xl transition-all ${
-                  testimonial.status === 'APPROVED'
+                className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-xl transition-all ${testimonial.status === 'APPROVED'
                     ? 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
                     : 'bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-500/20'
-                }`}
+                  }`}
               >
                 {testimonial.status === 'APPROVED' ? (
                   <>
@@ -207,15 +204,15 @@ const Testimonials = () => {
           </p>
         </div>
       </div>
-      
+
       {/* Footer */}
       <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700/60 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-8">
-         <p>© 2024 Yari Tech Admin Panel. Premium Cloud Infrastructure.</p>
-         <div className="flex items-center gap-6 mt-4 sm:mt-0">
-            <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Documentation</a>
-            <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Support</a>
-         </div>
+        <p>© 2026 Yari Tech Admin Panel. Premium Cloud Infrastructure.</p>
+        <div className="flex items-center gap-6 mt-4 sm:mt-0">
+          <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Documentation</a>
+          <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Support</a>
+        </div>
       </div>
     </div>
   );

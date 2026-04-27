@@ -1,5 +1,6 @@
 import { MessageSquare, Calendar, Mail, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const Contact = () => {
   const [loading, setLoading] = useState(false);
@@ -44,7 +45,13 @@ const Contact = () => {
     <section id="contact" className="py-24 bg-white dark:bg-[#0a0f1a]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">Contact</p>
           <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
             Let's Build Something Great
@@ -52,59 +59,77 @@ const Contact = () => {
           <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-base">
             Ready to take your digital presence to the next level? Let's talk.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid lg:grid-cols-5 gap-12 items-start max-w-6xl mx-auto">
           
           {/* Left: contact info */}
           <div className="lg:col-span-2 space-y-4">
-            <a href="https://wa.me/639000000000" target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-4 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/50 hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-lg hover:shadow-emerald-500/10 transition-all group card-hover"
-            >
-              <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-950/50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <MessageSquare className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div className="flex-1">
-                <h4 className="font-bold text-slate-900 dark:text-white text-sm">WhatsApp Us</h4>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">+63 900 000 0000</p>
-              </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
-            </a>
-
-            <a href="mailto:hello@yaritech.ph"
-              className="flex items-center gap-4 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/50 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-500/10 transition-all group card-hover"
-            >
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-950/50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div className="flex-1">
-                <h4 className="font-bold text-slate-900 dark:text-white text-sm">Email Us</h4>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">hello@yaritech.ph</p>
-              </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
-            </a>
-
-            <a href="#"
-              className="flex items-center gap-4 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/50 hover:border-violet-400 dark:hover:border-violet-600 hover:shadow-lg hover:shadow-violet-500/10 transition-all group card-hover"
-            >
-              <div className="w-12 h-12 bg-violet-100 dark:bg-violet-950/50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <Calendar className="w-5 h-5 text-violet-600 dark:text-violet-400" />
-              </div>
-              <div className="flex-1">
-                <h4 className="font-bold text-slate-900 dark:text-white text-sm">Book a Call</h4>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">30-min free consultation</p>
-              </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-violet-500 group-hover:translate-x-1 transition-all" />
-            </a>
+            {[
+              { 
+                href: "https://wa.me/639000000000", 
+                icon: MessageSquare, 
+                title: "WhatsApp Us", 
+                detail: "+63 900 000 0000", 
+                color: "emerald" 
+              },
+              { 
+                href: "mailto:hello@yaritech.ph", 
+                icon: Mail, 
+                title: "Email Us", 
+                detail: "hello@yaritech.ph", 
+                color: "blue" 
+              },
+              { 
+                href: "#", 
+                icon: Calendar, 
+                title: "Book a Call", 
+                detail: "30-min free consultation", 
+                color: "violet" 
+              }
+            ].map((item, i) => (
+              <motion.a 
+                key={item.title}
+                href={item.href}
+                target={item.href.startsWith('http') ? "_blank" : undefined}
+                rel={item.href.startsWith('http') ? "noopener noreferrer" : undefined}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className={`flex items-center gap-4 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-800/50 hover:border-${item.color}-400 dark:hover:border-${item.color}-600 hover:shadow-lg hover:shadow-${item.color}-500/10 transition-all group card-hover`}
+              >
+                <div className={`w-12 h-12 bg-${item.color}-100 dark:bg-${item.color}-950/50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                  <item.icon className={`w-5 h-5 text-${item.color}-600 dark:text-${item.color}-400`} />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-slate-900 dark:text-white text-sm">{item.title}</h4>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">{item.detail}</p>
+                </div>
+                <ArrowRight className={`w-4 h-4 text-slate-400 group-hover:text-${item.color}-500 group-hover:translate-x-1 transition-all`} />
+              </motion.a>
+            ))}
 
             {/* Trust note */}
-            <div className="mt-6 p-5 rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 text-white">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-6 p-5 rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 text-white"
+            >
               <p className="text-sm font-semibold mb-1">⚡ Fast response time</p>
               <p className="text-xs text-blue-100">We typically respond within 24 hours on business days.</p>
-            </div>
+            </motion.div>
           </div>
 
-          <div className="lg:col-span-3">
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-3"
+          >
             <div className="bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl shadow-black/5 dark:shadow-black/20 p-8">
               {submitted ? (
                 <div className="py-12 flex flex-col items-center text-center animate-in fade-in zoom-in duration-500">
@@ -203,7 +228,7 @@ const Contact = () => {
                 </form>
               )}
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>
