@@ -28,6 +28,9 @@ connectDB();
 
 const app = express();
 
+// Trust proxy for Render/Vercel
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors({
   origin: (origin, callback) => {
