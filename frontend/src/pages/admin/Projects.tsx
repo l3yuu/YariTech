@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react';
-import { ChevronDown, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, Rocket, X, Loader2 } from 'lucide-react';
+import { ChevronDown, Plus, Edit2, Trash2, Rocket, X, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 interface Project {
-  id: string; title: string; description: string;
-  badge: 'ACTIVE' | 'INTERNAL' | 'BETA'; tags: string[];
-  isVisible: boolean; gradient: string;
+  _id: string;
+  id?: string;
+  title: string;
+  description: string;
+  badge: 'ACTIVE' | 'INTERNAL' | 'BETA';
+  tags: string[];
+  isVisible: boolean;
+  gradient: string;
 }
-
-const mockProjects: Project[] = [
-  { id: '1', title: 'Analytics Engine', description: 'Real-time data processing and visualization platform for SME...', badge: 'ACTIVE', tags: ['React', 'Node.js', 'MongoDB'], isVisible: true, gradient: 'from-blue-500 to-cyan-600' },
-  { id: '2', title: 'Inventory API', description: 'Robust backend infrastructure for handling multi-channel retail...', badge: 'INTERNAL', tags: ['Node.js', 'Express', 'PostgreSQL'], isVisible: false, gradient: 'from-slate-600 to-slate-800' },
-  { id: '3', title: 'Student Portal v2', description: 'Complete overhaul of the academic learning management...', badge: 'ACTIVE', tags: ['React Native', 'Firebase'], isVisible: true, gradient: 'from-teal-500 to-emerald-600' },
-  { id: '4', title: 'SupplyChain AI', description: 'Machine learning models for predicting delivery delays in rur...', badge: 'BETA', tags: ['Python', 'TensorFlow'], isVisible: true, gradient: 'from-violet-500 to-blue-600' },
-];
 
 const badgeStyle = (b: string) => {
   if (b === 'ACTIVE') return 'bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300';
@@ -30,7 +28,7 @@ const Projects = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    badge: 'ACTIVE' as const,
+    badge: 'ACTIVE' as 'ACTIVE' | 'INTERNAL' | 'BETA',
     tags: '',
     isVisible: true,
     gradient: 'from-blue-500 to-violet-600'
@@ -180,7 +178,7 @@ const Projects = () => {
             <p className="text-slate-500 dark:text-slate-400 font-medium">No projects found. Create your first one!</p>
           </div>
         ) : (
-          projects.map((project: any) => (
+          projects.map((project) => (
             <div key={project._id} className="bg-white dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60 overflow-hidden shadow-sm hover:shadow-md dark:hover:shadow-slate-900/40 transition-all hover:-translate-y-0.5 flex flex-col group">
               {/* Image placeholder */}
               <div className={`h-44 w-full bg-gradient-to-br ${project.gradient} relative overflow-hidden flex items-center justify-center`}>

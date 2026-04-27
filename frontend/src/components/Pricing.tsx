@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const plans = [
   {
@@ -54,7 +55,13 @@ const Pricing = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">Pricing</p>
           <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
             Transparent Pricing
@@ -62,16 +69,21 @@ const Pricing = () => {
           <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-base">
             Scalable solutions for every stage of your business journey. No hidden fees.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
-          {plans.map((plan) => (
-            <div
+          {plans.map((plan, i) => (
+            <motion.div
               key={plan.name}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              whileHover={{ y: -5 }}
               className={`relative rounded-2xl p-8 flex flex-col ${
                 plan.isPopular
-                  ? 'bg-gradient-to-b from-[#0a192f] to-[#0f2040] dark:from-blue-950 dark:to-slate-900 text-white border border-blue-600/30 shadow-2xl shadow-blue-900/30 scale-105'
-                  : 'bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 shadow-sm card-hover'
+                  ? 'bg-gradient-to-b from-[#0a192f] to-[#0f2040] dark:from-blue-950 dark:to-slate-900 text-white border border-blue-600/30 shadow-2xl shadow-blue-900/30 md:scale-105 z-10'
+                  : 'bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 shadow-sm'
               }`}
             >
               {plan.isPopular && (
@@ -116,13 +128,19 @@ const Pricing = () => {
               >
                 {plan.cta}
               </a>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        <p className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400">
+        <motion.p 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400"
+        >
           Need a custom solution? <a href="#contact" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Let's talk</a>
-        </p>
+        </motion.p>
       </div>
     </section>
   );
