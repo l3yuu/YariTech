@@ -6,6 +6,11 @@ import Dashboard from './pages/admin/Dashboard';
 import Inquiries from './pages/admin/Inquiries';
 import Projects from './pages/admin/Projects';
 import Clients from './pages/admin/Clients';
+import Testimonials from './pages/admin/Testimonials';
+import Blog from './pages/admin/Blog';
+import NewBlogPost from './pages/admin/NewBlogPost';
+import Team from './pages/admin/Team';
+import Settings from './pages/admin/Settings';
 
 function App() {
   return (
@@ -21,6 +26,11 @@ function App() {
           <Route path="inquiries" element={<Inquiries />} />
           <Route path="projects" element={<Projects />} />
           <Route path="clients" element={<Clients />} />
+          <Route path="testimonials" element={<Testimonials />} />
+          <Route path="blog" element={<Blog />} />
+          <Route path="blog/new" element={<NewBlogPost />} />
+          <Route path="team" element={<Team />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </Router>

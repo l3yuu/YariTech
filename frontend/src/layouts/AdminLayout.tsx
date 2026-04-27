@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Inbox, 
@@ -12,11 +12,13 @@ import {
   Search,
   Bell,
   Menu,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -75,7 +77,7 @@ const AdminLayout = () => {
           ))}
         </nav>
 
-        <div className="p-4 bg-gray-900/50">
+        <div className="p-4 bg-gray-900/50 space-y-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
               YT
@@ -85,6 +87,13 @@ const AdminLayout = () => {
               <p className="text-xs text-gray-400">admin@yaritech.com</p>
             </div>
           </div>
+          <button
+            onClick={() => navigate('/login')}
+            className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors group"
+          >
+            <LogOut className="w-4 h-4 mr-3 group-hover:text-red-400" />
+            Logout
+          </button>
         </div>
       </aside>
 

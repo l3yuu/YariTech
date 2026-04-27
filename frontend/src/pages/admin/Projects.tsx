@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronDown, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, Rocket } from 'lucide-react';
+import { ChevronDown, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, Rocket } from 'lucide-react';
 
 interface Project {
   id: string;
