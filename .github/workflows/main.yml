@@ -1,0 +1,65 @@
+name: YariTech CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # --- BACKEND JOBS ---
+  backend-ci:
+    name: Backend CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './backend/package-lock.json'
+      
+      - name: Install Dependencies
+        run: npm ci
+      
+      - name: Check Types & Build
+        run: npm run build
+
+  # --- FRONTEND JOBS ---
+  frontend-ci:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './frontend/package-lock.json'
+      
+      - name: Install Dependencies
+        run: npm ci
+      
+      - name: Build Frontend
+        run: npm run build
+      
+  # --- DEPLOYMENT (Placeholder) ---
+  deploy:
+    name: Deploy to Production
+    needs: [backend-ci, frontend-ci]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Message
+        run: echo "Code validated! Ready for deployment to production."
