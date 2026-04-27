@@ -21,6 +21,8 @@ const __dirname = path.dirname(__filename);
 // Load env vars
 dotenv.config();
 
+console.log('Allowed Origins Configured:', process.env.ALLOWED_ORIGINS);
+
 // Connect to database
 connectDB();
 
@@ -28,7 +30,19 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : 'http://localhost:5173',
+  origin: (origin, callback) => {
+    const allowed = process.env.ALLOWED_ORIGINS 
+      ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim().replace(/\/$/, ''))
+      : ['http://localhost:5173'];
+    
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin || allowed.includes(origin.replace(/\/$/, ''))) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked for origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
