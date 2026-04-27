@@ -6,6 +6,7 @@ import projectRoutes from './routes/projectRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import inquiryRoutes from './routes/inquiryRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import clientRoutes from './routes/clientRoutes.js';
 
 
 // Load env vars
@@ -25,6 +26,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/clients', clientRoutes);
 
 
 
