@@ -1,24 +1,16 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { 
-  LayoutDashboard, 
-  Inbox, 
-  Rocket, 
-  Users, 
-  MessageSquareQuote, 
-  FileText, 
-  UserSquare2, 
-  Settings,
-  Search,
-  Bell,
-  Menu,
-  X,
-  LogOut
+  LayoutDashboard, Inbox, Rocket, Users, MessageSquareQuote,
+  FileText, UserSquare2, Settings, Search, Bell, Menu, X, LogOut,
+  Sun, Moon, Zap
 } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -32,112 +24,112 @@ const AdminLayout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Mobile sidebar backdrop */}
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0a0f1a] flex">
+      {/* Mobile backdrop */}
       {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-gray-900/50 z-40 lg:hidden backdrop-blur-sm"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* Sidebar */}
-      <aside 
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-gray-300 transform transition-transform duration-300 lg:translate-x-0 lg:static lg:flex-shrink-0 flex flex-col ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
-      >
-        <div className="h-16 flex items-center px-6 border-b border-gray-800">
-          <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">Yari Tech</h1>
-            <p className="text-[10px] uppercase tracking-widest text-blue-400 font-semibold">Admin Console</p>
+      {/* Sidebar — always dark */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#0a192f] text-gray-300 transform transition-transform duration-300 lg:translate-x-0 lg:static lg:flex-shrink-0 flex flex-col border-r border-slate-800 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        {/* Logo */}
+        <div className="h-16 flex items-center px-5 border-b border-slate-800/80">
+          <div className="flex items-center gap-2.5 flex-1">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-md">
+              <Zap className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h1 className="text-sm font-bold text-white tracking-tight">Yari<span className="text-blue-400">Tech</span></h1>
+              <p className="text-[9px] uppercase tracking-widest text-blue-400/70 font-semibold">Admin Console</p>
+            </div>
           </div>
-          <button 
-            className="ml-auto lg:hidden text-gray-400 hover:text-white"
-            onClick={() => setSidebarOpen(false)}
-          >
+          <button className="lg:hidden text-gray-400 hover:text-white" onClick={() => setSidebarOpen(false)}>
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
           {navigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.href}
               className={({ isActive }) =>
-                `flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors group ${
-                  isActive 
-                    ? 'bg-blue-600 text-white' 
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                `flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all group ${
+                  isActive
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md shadow-blue-900/40'
+                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
                 }`
               }
             >
-              <item.icon className="mr-3 flex-shrink-0 h-5 w-5" aria-hidden="true" />
+              <item.icon className="mr-3 flex-shrink-0 h-4 w-4" aria-hidden="true" />
               {item.name}
             </NavLink>
           ))}
         </nav>
 
-        <div className="p-4 bg-gray-900/50 space-y-3">
+        {/* User + Logout */}
+        <div className="p-4 border-t border-slate-800/80 space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">
-              YT
-            </div>
-            <div>
-              <p className="text-sm font-medium text-white">System Admin</p>
-              <p className="text-xs text-gray-400">admin@yaritech.com</p>
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-white font-bold text-xs shadow-md">YT</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-white truncate">System Admin</p>
+              <p className="text-xs text-slate-500 truncate">admin@yaritech.com</p>
             </div>
           </div>
           <button
             onClick={() => navigate('/login')}
-            className="w-full flex items-center px-3 py-2 text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors group"
+            className="w-full flex items-center px-3 py-2 text-xs font-medium text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors group"
           >
-            <LogOut className="w-4 h-4 mr-3 group-hover:text-red-400" />
-            Logout
+            <LogOut className="w-3.5 h-3.5 mr-2 group-hover:text-red-400" />
+            Sign Out
           </button>
         </div>
       </aside>
 
-      {/* Main Content Area */}
+      {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Topbar */}
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-10">
-          <div className="flex items-center flex-1">
-            <button 
-              className="mr-4 lg:hidden text-gray-500 hover:text-gray-700"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <Menu className="w-6 h-6" />
+        <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-10 sticky top-0">
+          <div className="flex items-center flex-1 gap-4">
+            <button className="lg:hidden text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-white" onClick={() => setSidebarOpen(true)}>
+              <Menu className="w-5 h-5" />
             </button>
-            <div className="max-w-md w-full hidden sm:block relative">
+            <div className="max-w-sm w-full hidden sm:block relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-gray-400" />
+                <Search className="h-4 w-4 text-slate-400" />
               </div>
-              <input 
-                type="text" 
-                placeholder="Search inquiries, projects..." 
-                className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-shadow"
+              <input
+                type="text"
+                placeholder="Search console..."
+                className="block w-full pl-9 pr-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
               />
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="text-gray-400 hover:text-gray-600 relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
+          <div className="flex items-center gap-2">
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            <button className="text-gray-400 hover:text-gray-600">
-              <Settings className="w-5 h-5" />
+            <button className="relative w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-2 right-2 block h-1.5 w-1.5 rounded-full bg-red-500 ring-1 ring-white dark:ring-slate-900" />
             </button>
-            <div className="h-6 w-px bg-gray-200 mx-1 hidden sm:block"></div>
-            <button className="hidden sm:flex items-center bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+            <div className="h-5 w-px bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block" />
+            <button className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all shadow-md shadow-blue-500/20">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
               Add Client
             </button>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50">
+        {/* Page content */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-slate-50 dark:bg-[#0a0f1a]">
           <Outlet />
         </main>
       </div>
