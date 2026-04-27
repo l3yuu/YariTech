@@ -1,5 +1,6 @@
 import { Star, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import API_URL from '../config';
 
 interface Testimonial {
   _id: string;
@@ -37,7 +38,7 @@ const Testimonials = () => {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/testimonials');
+        const response = await fetch(`${API_URL}/testimonials`);
         if (response.ok) {
           const data = await response.json();
           // Only show approved ones on landing page

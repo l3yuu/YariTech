@@ -4,6 +4,7 @@ import {
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import API_URL from '../../config';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/dashboard/stats', {
+        const response = await fetch(`${API_URL}/dashboard/stats`, {
           headers: {
             'Authorization': `Bearer ${user?.token}`
           }

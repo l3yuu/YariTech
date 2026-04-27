@@ -11,6 +11,11 @@ import testimonialRoutes from './routes/testimonialRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 // Load env vars
@@ -22,7 +27,12 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Routes
@@ -40,9 +50,19 @@ app.use('/api/settings', settingsRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.get('/', (req, res) => {
-    res.send('Yari Tech API is running!');
-});
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../../frontend', 'dist', 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+      res.send('Yari Tech API is running!');
+  });
+}
 
 // Basic Error Handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

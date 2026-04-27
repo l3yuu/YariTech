@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Edit3, Edit2, Trash2, Loader2, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import API_URL from '../../config';
 
 interface BlogPost {
   _id: string;
@@ -43,7 +44,7 @@ const Blog = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/blog');
+      const response = await fetch(`${API_URL}/blog`);
       if (response.ok) {
         const data = await response.json();
         setPosts(data);
@@ -94,7 +95,7 @@ const Blog = () => {
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/blog/${id}`, {
+      const response = await fetch(`${API_URL}/blog/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user?.token}`
@@ -112,8 +113,8 @@ const Blog = () => {
     e.preventDefault();
     try {
       const url = editingId 
-        ? `http://localhost:5000/api/blog/${editingId}`
-        : 'http://localhost:5000/api/blog';
+        ? `${API_URL}/blog/${editingId}`
+        : `${API_URL}/blog`;
       
       const response = await fetch(url, {
         method: editingId ? 'PUT' : 'POST',

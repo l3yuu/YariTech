@@ -20,6 +20,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import API_URL from '../../config';
 
 const Settings = () => {
   const { user } = useAuth();
@@ -57,7 +58,7 @@ const Settings = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/settings', {
+        const response = await fetch(`${API_URL}/settings`, {
           headers: {
             'Authorization': `Bearer ${user?.token}`
           }
@@ -87,7 +88,7 @@ const Settings = () => {
     setFeedback({ type: null, message: '' });
 
     try {
-      const response = await fetch('http://localhost:5000/api/settings', {
+      const response = await fetch(`${API_URL}/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +118,7 @@ const Settings = () => {
     setNotifications(updatedNotifications);
 
     try {
-      await fetch('http://localhost:5000/api/settings', {
+      await fetch(`${API_URL}/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -147,7 +148,7 @@ const Settings = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/updatepassword', {
+      const response = await fetch(`${API_URL}/auth/updatepassword`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
