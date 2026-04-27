@@ -4,6 +4,9 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import projectRoutes from './routes/projectRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import inquiryRoutes from './routes/inquiryRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+
 
 // Load env vars
 dotenv.config();
@@ -20,6 +23,9 @@ app.use(express.json());
 // Routes
 app.use('/api/projects', projectRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/inquiries', inquiryRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+
 
 
 const PORT = process.env.PORT || 5000;

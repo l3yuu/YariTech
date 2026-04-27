@@ -1,21 +1,43 @@
 import { 
-  Inbox, Rocket, Users, Wallet, Plus, Eye, UserPlus, MoreVertical, Pencil
+  Inbox, Rocket, Users, Wallet, Plus, Eye, UserPlus, MoreVertical, Pencil, Loader2
 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
+  const { user } = useAuth();
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/dashboard/stats', {
+          headers: {
+            'Authorization': `Bearer ${user?.token}`
+          }
+        });
+        const data = await response.json();
+        setStats(data);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, [user]);
+
   const metrics = [
-    { label: 'Total Inquiries', value: '128', icon: Inbox, change: '+12%', changeType: 'positive', gradient: 'from-blue-500 to-cyan-500', bg: 'bg-blue-50 dark:bg-blue-950/40', iconColor: 'text-blue-600 dark:text-blue-400' },
-    { label: 'Active Projects', value: '14', icon: Rocket, change: 'Stable', changeType: 'neutral', gradient: 'from-violet-500 to-purple-500', bg: 'bg-violet-50 dark:bg-violet-950/40', iconColor: 'text-violet-600 dark:text-violet-400' },
-    { label: 'Total Clients', value: '85', icon: Users, change: '+5', changeType: 'positive', gradient: 'from-orange-500 to-amber-500', bg: 'bg-orange-50 dark:bg-orange-950/40', iconColor: 'text-orange-600 dark:text-orange-400' },
-    { label: 'Revenue This Month', value: '₱245k', icon: Wallet, change: '+24%', changeType: 'positive', gradient: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50 dark:bg-emerald-950/40', iconColor: 'text-emerald-600 dark:text-emerald-400' },
+    { label: 'Total Inquiries', value: stats?.totalInquiries || '0', icon: Inbox, change: '+12%', changeType: 'positive', gradient: 'from-blue-500 to-cyan-500', bg: 'bg-blue-50 dark:bg-blue-950/40', iconColor: 'text-blue-600 dark:text-blue-400' },
+    { label: 'Active Projects', value: stats?.activeProjects || '0', icon: Rocket, change: 'Stable', changeType: 'neutral', gradient: 'from-violet-500 to-purple-500', bg: 'bg-violet-50 dark:bg-violet-950/40', iconColor: 'text-violet-600 dark:text-violet-400' },
+    { label: 'Total Clients', value: stats?.totalClients || '0', icon: Users, change: '+5', changeType: 'positive', gradient: 'from-orange-500 to-amber-500', bg: 'bg-orange-50 dark:bg-orange-950/40', iconColor: 'text-orange-600 dark:text-orange-400' },
+    { label: 'Revenue This Month', value: stats?.revenue || '₱0', icon: Wallet, change: '+24%', changeType: 'positive', gradient: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50 dark:bg-emerald-950/40', iconColor: 'text-emerald-600 dark:text-emerald-400' },
   ];
 
-  const inquiries = [
-    { id: 1, name: 'Juan dela Cruz', email: 'juan.dc@example.com', type: 'Web Dashboard', status: 'NEW', date: 'Oct 24, 2023' },
-    { id: 2, name: 'Maria Santos', email: 'm.santos@biz.ph', type: 'E-commerce App', status: 'IN REVIEW', date: 'Oct 23, 2023' },
-    { id: 3, name: 'Antonio Luna', email: 'luna.general@corp.com', type: 'Cloud Migration', status: 'REPLIED', date: 'Oct 21, 2023' },
-    { id: 4, name: 'Liza Soberano', email: 'liza@media.ph', type: 'Portfolio Design', status: 'CLOSED', date: 'Oct 18, 2023' },
-  ];
+  const inquiries = stats?.recentInquiries || [];
 
   const chartData = [
     { month: 'May', value: 40 }, { month: 'Jun', value: 55 },
@@ -79,17 +101,32 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-700/40">
-                {inquiries.map((inq) => (
-                  <tr key={inq.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-700/30 transition-colors">
-                    <td className="px-5 py-3.5 font-medium text-slate-900 dark:text-white whitespace-nowrap">{inq.name}</td>
-                    <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 hidden md:table-cell">{inq.email}</td>
-                    <td className="px-5 py-3.5 text-slate-700 dark:text-slate-300 hidden lg:table-cell">{inq.type}</td>
-                    <td className="px-5 py-3.5">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${statusStyle(inq.status)}`}>{inq.status}</span>
+                {loading ? (
+                  <tr>
+                    <td colSpan={5} className="px-5 py-10 text-center text-slate-400">
+                      <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2" />
+                      Loading inquiries...
                     </td>
-                    <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap hidden sm:table-cell">{inq.date}</td>
                   </tr>
-                ))}
+                ) : inquiries.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-5 py-10 text-center text-slate-400">No recent inquiries</td>
+                  </tr>
+                ) : (
+                  inquiries.map((inq: any) => (
+                    <tr key={inq._id} className="hover:bg-slate-50/80 dark:hover:bg-slate-700/30 transition-colors">
+                      <td className="px-5 py-3.5 font-medium text-slate-900 dark:text-white whitespace-nowrap">{inq.name}</td>
+                      <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 hidden md:table-cell">{inq.email}</td>
+                      <td className="px-5 py-3.5 text-slate-700 dark:text-slate-300 hidden lg:table-cell">{inq.projectType}</td>
+                      <td className="px-5 py-3.5">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${statusStyle(inq.status)}`}>{inq.status}</span>
+                      </td>
+                      <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap hidden sm:table-cell">
+                        {new Date(inq.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -100,18 +137,18 @@ const Dashboard = () => {
           <div className="bg-white dark:bg-slate-800/60 p-5 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
             <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-4">Quick Actions</h3>
             <div className="space-y-2.5">
-              <button className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all group">
+              <Link to="/admin/projects" className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all group">
                 <div className="flex items-center"><Plus className="w-4 h-4 mr-2.5" /><span>Add Project</span></div>
                 <span className="opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
-              </button>
-              <button className="w-full flex items-center justify-between p-3 bg-white dark:bg-slate-700/50 border border-blue-200 dark:border-blue-800/60 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-xl text-sm font-medium transition-colors group">
+              </Link>
+              <Link to="/admin/inquiries" className="w-full flex items-center justify-between p-3 bg-white dark:bg-slate-700/50 border border-blue-200 dark:border-blue-800/60 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-xl text-sm font-medium transition-colors group">
                 <div className="flex items-center"><Eye className="w-4 h-4 mr-2.5" /><span>View Inquiries</span></div>
                 <span className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
-              </button>
-              <button className="w-full flex items-center justify-between p-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl text-sm font-medium transition-colors group">
+              </Link>
+              <Link to="/admin/team" className="w-full flex items-center justify-between p-3 bg-white dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl text-sm font-medium transition-colors group">
                 <div className="flex items-center"><UserPlus className="w-4 h-4 mr-2.5" /><span>Add Team Member</span></div>
                 <span className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all">→</span>
-              </button>
+              </Link>
             </div>
           </div>
 
