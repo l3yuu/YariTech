@@ -8,6 +8,8 @@ import inquiryRoutes from './routes/inquiryRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import clientRoutes from './routes/clientRoutes.js';
 import testimonialRoutes from './routes/testimonialRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
+import teamRoutes from './routes/teamRoutes.js';
 
 
 // Load env vars
@@ -29,6 +31,8 @@ app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/blog', blogRoutes);
+app.use('/api/team', teamRoutes);
 
 
 
