@@ -1,6 +1,10 @@
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Hero = () => {
+  const { user } = useAuth();
+
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-white dark:bg-[#0a0f1a]">
       
@@ -34,13 +38,24 @@ const Hero = () => {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <a
-                href="#contact"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:-translate-y-0.5"
-              >
-                Get a Free Quote
-                <ArrowRight className="w-4 h-4" />
-              </a>
+              {user ? (
+                <Link
+                  to="/admin/dashboard"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:-translate-y-0.5"
+                >
+                  Manage Dashboard
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              ) : (
+                <a
+                  href="#contact"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:-translate-y-0.5"
+                >
+                  Get a Free Quote
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              )}
+
               <a
                 href="#portfolio"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl text-base font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all hover:-translate-y-0.5"

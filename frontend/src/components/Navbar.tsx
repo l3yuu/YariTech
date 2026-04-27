@@ -73,12 +73,21 @@ const Navbar = () => {
             >
               {user ? 'Dashboard' : 'Login'}
             </Link>
-            <a
-              href="#contact"
-              className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 shadow-md shadow-blue-500/25 transition-all hover:shadow-blue-500/40 hover:-translate-y-0.5"
-            >
-              Get Started
-            </a>
+            {user ? (
+              <Link
+                to="/admin/dashboard"
+                className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 shadow-md shadow-blue-500/25 transition-all hover:shadow-blue-500/40 hover:-translate-y-0.5"
+              >
+                Go to Console
+              </Link>
+            ) : (
+              <a
+                href="#contact"
+                className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 shadow-md shadow-blue-500/25 transition-all hover:shadow-blue-500/40 hover:-translate-y-0.5"
+              >
+                Get Started
+              </a>
+            )}
           </div>
 
           {/* Mobile: theme toggle + hamburger */}
@@ -117,9 +126,23 @@ const Navbar = () => {
             >
               {user ? 'Dashboard' : 'Login'}
             </Link>
-            <a href="#contact" className="flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600">
-              Get Started
-            </a>
+            {user ? (
+              <Link 
+                to="/admin/dashboard" 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600"
+              >
+                Go to Console
+              </Link>
+            ) : (
+              <a 
+                href="#contact" 
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600"
+              >
+                Get Started
+              </a>
+            )}
           </div>
         </div>
       )}
